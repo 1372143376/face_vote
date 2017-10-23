@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>PHP发表心情</title>
+<meta name="keywords" content="php,发表心情,投票,jquery,ajax">
+<meta name="description" content="当浏览新闻页面或者其它页面的时候会有阅读后的感受，比如给力、淡定、打酱油、加油、坑爹等等的表情。让读者打分，看看自己的感受是否与其他读者一样。很不错的交互！">
+<style type="text/css">
+#mood{text-align:center;}
+#mood ul li,#mood ul li div.pillar{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline;}
+#mood ul li{width:80px; vertical-align: bottom; font-size:14px}
+#mood ul li span{ font-size:12px}
+#mood ul li div.pillar{height:20px; width:80px; background:url(images/bar.gif) repeat-y center;}
+img{border:1px solid #fff}
+.face{padding-top:10px; cursor:pointer}
+.face:hover{background:#f2faed}
+</style>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		type: 'GET',
+		url: 'mood.php',
+		cache: false,
+		data: 'id=2',
+		dataType: 'json',
+		error: function(){
+			alert('出错了！');
+		},
+		success: function(json){
+			if(json){
+				$.each(json,function(index,array){
+					var str = "<li><span>"+array['mood_val']+"</span><div class=\"pillar\" style=\"height:"+array['height']+"px;\"></div><div class=\"face\" rel=\""+array['mid']+"\"><img src=\"images/"+array['mood_pic']+"\"><br/>"+array['mood_name']+"</div></li>";
+            		$("#mood ul").append(str); 
+       			}); 
+			}
+		}
+	});
+	$(".face").live('click',function(){
+		var face = $(this);
+		var mid = face.attr("rel");
+		var value = face.parent().find("span").html();
+		var val = parseInt(value)+1;
+		$.post("mood.php?action=send",{moodid:mid,id:2},function(data){
+			if(data>0){
+				face.prev().css("height",data+"px");
+				face.parent().find("span").html(val);
+				face.find("img").addClass("selected");
+			}else{
+				alert(data);
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<div id=mood>
+<ul></ul>
+</div>
+</body>
+</html>
