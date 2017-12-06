@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>PHP发表心情</title>
 <meta name="keywords" content="php,发表心情,投票,jquery,ajax">
-<meta name="description" content="当浏览新闻页面或者其它页面的时候会有阅读后的感受，比如给力、淡定、打酱油、加油、坑爹等等的表情。让读者打分，看看自己的感受是否与其他读者一样。很不错的交互！">
+<meta name="description" content="给力、淡定、打酱油、加油、坑爹等等的表情">
 <style type="text/css">
 #mood{text-align:center;}
 #mood ul li,#mood ul li div.pillar{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline;}
@@ -18,7 +18,19 @@ img{border:1px solid #fff}
 <script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	$.ajax({
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    var isAndroid = sUserAgent.match(/android/i) == 'android';
+    var isIos = sUserAgent.match(/iphone os/i) == 'iphone os';
+    if(isAndroid||isIos)
+    {
+        //移动端
+        alert(1);
+    }
+    else
+    {
+        //pc
+    }
+    $.ajax({
 		type: 'GET',
 		url: 'mood.php',
 		cache: false,
